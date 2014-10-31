@@ -1,0 +1,66 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+//#include <conio.h>
+//#include <time.h>
+//#include <math.h>
+
+#define MAX  100
+#define LINE 100
+
+using namespace std;
+
+class Mammal {
+    protected:
+        string name;
+    public:
+        void voice();
+        string getName(){return name;}
+        void setName(string newName);
+        Mammal(string n);
+     };
+
+    Mammal::Mammal (string n){
+    name = n;
+    cout << "mammal " << n << " appears!\n";
+    }
+
+class Cat:Mammal {
+        public:
+            Cat (string n):Mammal(n){cout<<n<<" is a cat\n";}
+        void voice(){cout<<"Cat "<<name<<" says Meow!\n";}
+    };
+
+class Dog:Mammal {
+        public:
+            Dog (string n):Mammal(n){cout<<n<<" is a dog\n";}
+        void voice(){cout<<"Dog "<<name<<" says Gaw!\n";}
+    };
+
+
+    void Mammal::voice(){
+    cout << name<<" says Yo!\n";
+    }
+    void Mammal::setName(string newName) {name =newName;}
+
+
+
+int main()
+    {
+     Mammal x("Detzl");
+     cout<< "Hello, I am " <<x.getName()<<"\n";
+
+     x.voice();
+     x.setName("FatBoy");
+     x.voice();cout<<endl;
+
+     Cat th("Thomas");
+     th.voice();cout<<endl;
+
+     Dog rd("Kuzia");
+     rd.voice();
+     return 0;
+    }
+
+///Доабавить класс собака
