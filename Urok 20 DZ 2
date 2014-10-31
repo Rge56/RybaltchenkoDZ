@@ -1,0 +1,59 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+
+using namespace std;
+
+class Student_group
+    {
+ protected:
+    string name;
+    unsigned int age;
+    unsigned int course;
+    string profession;
+ public:
+    Student_group(string a,unsigned int b,unsigned int c,string d);
+    string GetNamestudent();
+    void SetNamestudent(string newName);
+    int GetAge();
+    int GetCourse();
+    string GetProfession();
+    };
+
+Student_group::Student_group(string a,unsigned int b,unsigned int c,string d)
+    {
+     name       = a;
+     age        = b;
+     course     = c;
+     profession = d;
+     cout<<a<<" "<<b<<" god "<<c<<" cours "<<d<<" ";
+    }
+
+string Student_group::GetNamestudent(){return name;}
+void Student_group::SetNamestudent(string newName){name=newName;}
+int Student_group::GetAge(){return age;}
+int Student_group::GetCourse(){return course;}
+string Student_group::GetProfession(){return profession;}
+
+class Sidorova:Student_group
+    {
+public:
+    Sidorova(string a,unsigned int b,unsigned int c,string d):Student_group(a,b,c,d){cout<<" is a Girl\n";}
+    };
+
+
+int main()
+{
+    Student_group x ("Ivanov Ivan Ivanovich",21,3,"Accountant");cout<<endl;
+    cout << x.GetNamestudent()<<endl;
+    cout << x.GetAge()<<endl;
+    cout << x.GetCourse()<<endl;
+    cout << x.GetProfession()<<endl;
+    x.SetNamestudent("Petrov Petr Petrovich");
+    cout << x.GetNamestudent()<<endl;
+
+    Sidorova th("Sidorova Natalia Petrovna",18,1,"Accountant");
+
+    return 0;
+}
