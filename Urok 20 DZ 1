@@ -1,0 +1,68 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#define COUNMIN 0
+#define COUNMAX 100
+
+using namespace std;
+
+
+class Counter
+    {
+ protected:
+     unsigned int current_counter, MIN, MAX;
+ public:
+     Counter (unsigned int a, unsigned int b);
+     int Install_counter_MIN (unsigned int a);
+     int Install_counter_MAX (unsigned int a);
+     void Increment_counter();
+     int  Read_current_importance();
+    };
+
+Counter::Counter (unsigned int a, unsigned int b)
+    {
+    MIN = a;
+    MAX = b;
+    current_counter = MIN;
+    }
+
+int Counter::Install_counter_MIN (unsigned int a)
+    {
+    MIN = a;
+    if(current_counter<MIN) current_counter=MIN;
+    return MIN;
+    }
+int Counter::Install_counter_MAX (unsigned int a){return MAX = a;}
+void Counter::Increment_counter() {if(++current_counter > MAX) current_counter = MIN;}
+int Counter::Read_current_importance(){return current_counter;}
+
+
+int main()
+{
+    unsigned int x=0;
+
+    Counter obj(COUNMIN,COUNMAX);
+
+    printf("Enter minimum importance for counter\n");
+    scanf("%d",&x);
+    printf("Minimum importance for counter is %d\n\n",obj.Install_counter_MIN (x));
+
+    printf("Enter maximum importance for counter\n");
+    scanf("%d",&x);
+    printf("Maximum importance for counter is %d\n\n",obj.Install_counter_MAX (x));
+
+    x=0;
+    printf("Enlarge counter on unit?\n");
+    printf("If ""yes"" - enter 1 if ""no"" - enter 0\n");
+    do
+        {
+        scanf("%d",&x);
+        if(x) obj.Increment_counter();
+        printf("Current importance of the counter - %d\n",obj.Read_current_importance());
+        }
+    while(x);
+
+
+    return 0;
+}
