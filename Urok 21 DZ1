@@ -1,0 +1,132 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <string>
+#include <cstring>
+#include <time.h>
+#define MAX 5
+
+using namespace std;
+
+class Person
+{
+    string name;
+    size_t age;
+    string sex;
+    size_t telNumber;
+
+public:
+    Person()
+        {
+        name="A";
+        age=0;
+        sex="M";
+        telNumber=0;
+        cout<<"This is konstruktor\n";
+        }
+
+    Person(const Person &obj){
+     /*       cout<<"Name of the Persona "<<obj.name<<"\n";
+            cout<<"Age of the Persona "<<obj.age<<"\n";
+            cout<<"Sex of the Persona "<<obj.sex<<"\n";
+            cout<<"Telephone number of the Persona "<<obj.telNumber<<"\n";*/
+            cout<<"This is constructor copy\n";
+    }
+
+    ~Person(){cout<<"This is destruktor\n";};
+
+    void setName(string newName)    {name=newName;};
+    void setSex(string newSex)      {sex=newSex;};
+    void setAge(size_t newAge)      {age=newAge;};
+    void setNumber(size_t newNumber){telNumber=newNumber;};
+
+    string getName(){return name;};
+    size_t getAge() {return age;};
+    string getSex() {return sex;};
+    size_t getNumber() {return telNumber;};
+};
+
+    void f(Person o)
+        {
+            cout<<"Name of the Persona "<<o.getName()<<"\n";
+            cout<<"Age of the Persona "<<o.getAge()<<"\n";
+            cout<<"Sex of the Persona "<<o.getSex()<<"\n";
+            cout<<"Telephone number of the Persona "<<o.getNumber()<<"\n";
+        }
+/*
+void _cls(){
+static const int LINE_COUNT = 200;
+for(int i=0;i<LINE_COUNT;i++) cout<<"\n";
+LINE_COUNT = 0;
+}
+*/
+
+int main()
+{
+    Person A[MAX];
+    size_t x=0,y=0,z=0;
+    string s;
+
+    do
+        {
+        cout<<"You want to change person data?"<<endl;
+        cout<<"If yes - press any numeral"<<endl;
+        cout<<"If no - press zero"<<endl;
+        scanf("%d",&x);
+        if(x)
+            {
+             cout<<"Will enter serial number of the persona, \ngiven which you want to change\n";
+             do
+                {
+                 scanf("%d",&y);
+                 if(y>MAX) {/*system("cls");*/cout<<"Persona with such number no, try once again";cout<<endl;}
+                 else break;
+                }
+             while (y>MAX);
+
+        cout<<"Will enter name"<<endl;
+//        scanf("%s",&s);
+        cin>>s;cout<<endl;
+        A[y].setName(s);
+
+        cout<<"Will enter age"<<endl;
+        cin>>z;cout<<endl;
+        A[y].setAge(z);
+
+        cout<<"Will enter sex"<<endl;
+        cin>>s;cout<<endl;
+        A[y].setSex(s);
+
+        cout<<"Will enter teltphone number"<<endl;
+        cin>>z;cout<<endl;
+        A[y].setNumber(z);
+
+//        system("cls");
+            }
+        else
+            {
+//            system("cls");
+            cout<<"You want to look given about Person?\n";
+            cout<<"If yes - press any numeral"<<endl;
+            cout<<"If no - press zero"<<endl;
+            scanf("%d",&z);
+            if(z)
+                {
+                cout<<"Will enter serial number of the persona, \ngiven which you want to look\n";
+                scanf("%d",&z);
+   //             cout<<A[z].getName()<<"\n";
+                for(int i=0;i<4;i++)
+                    {
+                    cout<<A[i].getName()<<"\n";
+                    f(A[i]);
+                    }
+                }
+            else{cout<<"Goodbye\n";break;}
+            }
+        }
+    while(x);
+
+    return 0;
+}
