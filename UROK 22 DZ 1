@@ -1,0 +1,76 @@
+#include <iostream>
+#include <fstream>
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include <string>
+#include <cstring>
+#include <time.h>
+
+#define DAYMONTH 30
+#define DAYYEAR  365
+
+using namespace std;
+//Для упрощения: в любом месяце - 30 дней, в году 12 месяцев (начиная с 1), в любом году - 365 дней (года начинается с 1)
+//AmountDays = Iday+(Imonth-1)*DAYMONTH+(Iyear-1)*DAYYEAR;
+
+class Date{
+    int day;
+    int month;
+    int year;
+    int AmountDays;
+ //   enum Months{JAN,FEB,MAR,APR,YUN,YUL,AUG,SEP,OCT,NOV,DEC};
+public:
+    Date(){AmountDays = 0;}
+    Date(int a,int b,int c){day=a;month=b;year=c;};
+    Date(int a){AmountDays = a;}
+
+    Date operator-(const Date& obj) const {
+        Date temp(AmountDays-obj.AmountDays);
+        return temp;
+    }
+
+    Date operator+(const Date& obj) const {
+        Date temp(AmountDays+obj.AmountDays);
+        return temp;
+    }
+
+    void AmDays (){AmountDays=day+(month-1)*DAYMONTH+(year-1)*DAYYEAR;}
+
+
+void print(){cout<<AmountDays<<"\n";};
+    void printfToStream(ostream &str){str<<AmountDays;cout<<"\n";};
+};
+
+int main()
+{
+    unsigned int a,b,c;
+
+    cout<<"Enter dey:     ";
+    cin>>a;
+    cout<<"Enter month:   ";
+    cin>>b;
+    cout<<"Enter year:    ";
+    cin>>c;
+    Date A(a,b,c);
+
+    cout<<"Enter dey:     ";
+    cin>>a;
+    cout<<"Enter month:   ";
+    cin>>b;
+    cout<<"Enter year:    ";
+    cin>>c;
+    Date B(a,b,c);
+
+    A.AmDays();
+    B.AmDays();
+    Date C=B-A;
+    A.print();
+    B.print();
+    C.printfToStream(cout);
+
+    C=100;
+    C=B+C;
+    C.printfToStream(cout);
+    return 0;
+}
