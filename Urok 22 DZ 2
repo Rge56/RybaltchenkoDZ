@@ -1,0 +1,163 @@
+#include <iostream>
+#include "_string.h"
+
+using namespace std;
+
+class _string
+{
+    private:
+        char* S;
+        int len;
+
+    public:
+        _string();                  //конструктор по умолчанию
+        _string(char* s);           //конструктор с параметрами
+        _string(const _string &s);  //конструктор копирования
+       ~_string(){delete[]S;cout<<"destructor\n";};      //деструктор
+
+void Sort(_string s[], int n);      ///Метод сортировки пузырьком
+const char* GetStr()const{return S;};///Константный метод, возвращающий содержимое строки
+void SetStr();                      ///Метод, позволяющий изменить строку с помощью пользователя
+_string operator+(const _string &); ///Перегрузка бинарного оператора +, функция реализует сцепление строк
+_string &operator=(const _string &);///Перегрузка бинарного оператора =, функция присваивания объектов друг другу
+_string operator*(const _string &); ///Перегрузка бинарного оператора *, функция реализует "пересечение" строк
+operator char* (){return S;}        ///Перегрузка типа, преобразование объекта класса к типу char*
+};
+
+_string::_string()
+    {
+    S=NULL;
+    len = 0;
+    cout<<"constructor ympty\n";
+    }
+
+_string::_string(char* s)
+    {
+    len = strlen(s);
+    S = new char [len+1];
+    strcpy(S,s);
+    cout<<"constructor s parametr\n";
+    }
+
+_string::_string(const _string &s)
+    {
+    len = s.len;
+    S = new char [len+1];
+    strcpy(S,s.S);
+    cout<<"constructor copy\n";
+    }
+
+void _string::Sort(_string s[], int n)
+    {
+    _string temp;
+    for(int i=0;i<n-1;i++)
+        {
+        for(int j=n-1;j>i;j--)
+            {
+            if(strcmp(s[j].S, s[j-1].S)<0)
+                {
+                temp  = s[j];
+                s[j]  = s[j-1];
+                s[j-1]= temp;
+//                cout<<"0000000000000\n";
+                }
+            }
+        }
+    }
+
+void _string::SetStr()              ///Метод, позволяющий изменить строку с помощью пользователя
+    {
+    if(S!=NULL) delete [] S;        ///Если строка не пустая - очистить
+    char a[256];                    ///Создаем массив
+    cin.getline(a,256);             ///Запрашиваем данные у пользователя
+    len = strlen(a);                ///Просчитываем размер
+    S = new char[len+1];            ///Выделяем память
+    strcpy(S,a);                    ///Переписываем в объект введенную строку
+    }
+
+_string _string::operator+(const _string &str)
+    {
+    _string s;                      ///Создадим временный объект s
+    s.len = len + str.len;          ///Вычислим новую длину строки
+    s.S = new char [s.len+1];       ///Выделим память под новую строку
+    strcpy(s.S,S);                  ///Проинициализируем первую часть строки
+    strcat(s.S,str.S);              ///Проинициализируем вторую часть строки
+    return s;                       ///Возвратим новый объект
+    }
+
+_string& _string::operator=(const _string &str)
+    {
+    if(this == &str) return *this;
+    if(len!=str.len || len==0)      ///Если размеры строк не совпадают или строка, куда производится запись не сформирована
+        {
+        delete []S;                 ///Удаление страрой строки
+        len = str.len;              ///Вычисление новой длины строки
+        S = new char [len+1];       ///Выделение памяти под новую строку
+        }
+     strcpy(S,str.S);               ///Инициализация строки
+     return *this;                  ///Возврат ссылки на самого себя, благодаря чему возможно многократное присваивание
+    }                               ///объектов друг другу
+
+
+_string _string::operator*(const _string &str)
+    {
+    _string s;
+
+    if(len>str.len)
+        {
+         s.len = len;
+        s.S = new char [s.len+1];
+        for(int i=0,z=0;i<str.len+1;i++)
+            {
+            for(int j=0;j<len+1;j++)
+                {
+                if(S[j]==str.S[i])    {s.S[z++]=S[j]; break;}
+                }
+            }
+         }
+    else
+        {
+          s.len = str.len;
+        s.S = new char [s.len+1];
+        for(int i=0,z=0;i<len+1;i++)
+            {
+            for(int j=0;j<str.len+1;j++)
+                {
+                if(S[i]==str.S[j])  {s.S[z++]=S[i]; break;}
+                }
+            }
+         }
+    return s;
+    }
+
+
+int main()
+    {
+    int n,i;
+    cout<<"Input the number of string s: \t";///Вводим количесво строк
+    cin>>n;
+    if(n<0)
+        {
+        cout<<"Error number:\t"<<n<<endl;
+        return -1;
+        }
+    char c[2];                  ///Забираем из потока символ Enter ("\n")
+    cin.getline(c,2);
+    _string *s = new _string[n];///Создадим массив из n строк
+
+    for(i=0;i<n;i++) s[i].SetStr();
+
+    s->Sort(s,n);
+    for(i=0;i<n;i++) cout<<"\n"<<s[i].GetStr()<<"\n";
+    delete []s;
+    cout<<"\n\n++++++++++++++++++++++++++++\n\n";
+    _string A,B,C,RES;
+    A = "Ivanov ";
+    B = "Ivan ";
+    C = "Ivanovich";
+    RES=A+B+C;
+    cout<<RES.GetStr()<<"\n\n";
+    RES=A*B;
+    cout<<RES.GetStr()<<"\n\n";
+    return 0;
+    }
