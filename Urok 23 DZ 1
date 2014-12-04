@@ -1,0 +1,166 @@
+#include <iostream>
+#include <stdlib.h>
+#include <string.h>
+#include <conio.h>
+#include <stdio.h>
+#include <malloc.h>
+#include <time.h>
+
+using namespace std;
+
+class Array{
+    char *str;
+    size_t size;
+
+public:
+    Array();
+    Array(const char *s);
+    Array(const Array &source);
+    ~Array();
+
+    Array operator+(const Array &s)const;
+    Array operator-(const Array &s)const;
+    Array operator=(const Array &s);
+    char& operator[](const int index);
+    Array& operator++();
+    Array operator--();
+    void setSize(size_t i, size_t j);
+    void Show (){printf("%s",str);};
+    };
+
+   Array::Array(){
+        str=NULL;
+        size =0;
+        cout<<"constructor empty\n";
+    }
+
+    Array::Array(const char *s){
+        size = strlen(s);
+        str=(char*) malloc(sizeof(char)*(size+1));
+        strcpy(str,s);
+        cout<<"constructor this parametr\n";
+    }
+
+    Array::Array(const Array &source){
+       size=  source.size;
+       str=(char*) malloc(sizeof(char)*(size+1));
+       strcpy(str,source.str);
+       cout<<"This is construktor copy\n";
+    }
+
+    Array::~Array(){free(str); cout<<"destruktor\n";}
+
+    Array Array::operator+(const Array &s)const{
+        Array temp;
+        temp.size = size+s.size;
+        temp.str=(char*) malloc(sizeof(char)*(temp.size));
+        strcpy(temp.str,str);
+        temp[size-1]=NULL;
+        strcat(temp.str,s.str);
+        return temp;
+    }
+
+    Array Array::operator-(const Array &s)const{
+        char* pch,*temp=(char*) malloc(sizeof(char)*(size));
+        *temp=NULL;
+        char* copyr=(char*) malloc(sizeof(char)*(size));
+        strcpy(copyr,str);
+        pch=strtok(copyr,s.str);
+        while(pch!=NULL)
+                {
+                 strcat(temp,pch);
+                 pch=strtok(NULL,s.str);
+                }
+        return temp;
+    }
+
+    Array Array::operator=(const Array &s){
+ /*       if(this==&s) return *this;  //Пердотвращение присваивания самому себе
+        if(str!=s.str || str==0){   //если длины строк не совпадают, или строка не сформирована
+            free(str);              //удаляем старую строку
+            size=s.size;            //новая длина строки
+            str=(char*) malloc(sizeof(char)*(size+1));
+        }
+        strcpy(str,s.str);
+        return *this;
+*/
+        if(s.size>size){
+                char* newstr = (char*) malloc(sizeof(char)*(s.size));
+                str = newstr;
+                strcpy(str,s.str);
+                return str;
+        }
+    }
+
+    char& Array::operator[](const int index) {
+        if (index<0) fprintf(stderr,"Index out of range in String::operator[]\n");
+        else return str[index];
+    }
+
+    Array& Array::operator++(){
+        srand(time(NULL));
+        int a[1];
+        a[0]= rand()%128+47;
+        strcat(str,(char*)a);
+        return *this;
+    }
+
+    Array Array::operator--(){
+        int a=strlen(str);
+        str[a-1]='\n';
+        return *this;
+    }
+
+int main()
+{
+  /*  for(int i=0;i<200; i++)
+    {printf("* %d %c ***",i,i);
+    if(i%7) printf("\n");
+    }*/
+    cout<<"Enter String:  ";
+    char mystring1[256];
+    fgets(mystring1,256,stdin);
+    cout<<endl;
+
+    cout<<"Enter second String:  ";
+    char mystring2[256];
+    fgets(mystring2,256,stdin);
+    cout<<endl;
+
+    Array A(mystring1);
+    Array B(mystring2);
+    Array C;
+
+    cout<<"Add string 1 to string 2\n";
+
+    C=A+A+B;
+    cout<<"String 1:          ";A.Show();
+    cout<<"String 2:          ";B.Show();
+    cout<<"String amount:     ";C.Show();
+
+    C=A-B;
+    cout<<"String 1:          ";A.Show();
+    cout<<"String 2:          ";B.Show();
+    cout<<"String difference: ";C.Show();
+
+    cout<<endl;
+    cout<<A[5]<<endl;
+    cout<<B[1]<<endl;
+    cout<<C[6]<<endl;
+    ++C;
+    ++A;
+    ++B;
+
+    cout<<"String ++A: ";A.Show();
+    cout<<"String ++B: ";B.Show();
+    cout<<"String ++C: ";C.Show();
+
+    --C;
+    --A;
+    --B;
+    cout<<"String --A: ";A.Show();
+    cout<<"String --B: ";B.Show();
+    cout<<"String --C: ";C.Show();
+
+    return 0;
+}
