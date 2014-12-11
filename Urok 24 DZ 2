@@ -1,0 +1,212 @@
+#include <iostream>
+#include <time.h>
+#include <stdlib.h>
+
+using namespace std;
+
+class Matrix{
+    int** m;
+    size_t line;
+    size_t column;
+
+public:
+    Matrix():m(NULL),line(0),column(0){};
+    Matrix(size_t a, size_t b);
+    Matrix(const Matrix &s);
+    ~Matrix();
+    Matrix operator+(const Matrix& s)const;
+    Matrix operator-(const Matrix& s)const;
+    Matrix operator*(const Matrix& s)const;
+    Matrix operator--(int);
+    Matrix& operator=(const Matrix& s);
+    void operator()(const int a, const int b, int c){*(*(m+a)+b)=c;}
+    void Filling_matrix();
+    void Show()const;
+    void Show(int a,int b) {cout<<"m["<<a<<"]["<<b<<"] member of the matrix = "<<m[a][b]<<endl;}
+
+   };
+
+    Matrix::Matrix(size_t l, size_t c){
+        line =l;
+        column=c;
+        m= new int*[l];
+        for(int i=0;i<l;i++) m[i]= new int[c];
+      //  cout<<"Construktor with parameter";
+    }
+
+    Matrix::Matrix(const Matrix &s){
+        line = s.line;
+        column = s.column;
+        m= new int*[line];
+        for(int i=0;i<line;i++) m[i]= new int[column];
+        cout<<"Construktor copy";
+    }
+
+    Matrix::~Matrix(){
+        for(int i=0;i<line;i++) delete []m[i];
+        delete []m;
+      //  cout<<"This destructor\n";
+    }
+
+    Matrix Matrix:: operator+(const Matrix& s)const{
+         Matrix temp;
+        if(s.line!=line || s.column!=column)cout<<"Matrixes are not!!!!!!!\n";
+        else
+        {
+            temp.line =line;
+            temp.column=column;
+            temp.m= new int*[temp.line];
+            for(int i=0;i<temp.line;i++) temp.m[i]= new int[temp.column];
+
+            for(int i=0;i<temp.line;i++)
+            for(int j=0;j<temp.column;j++)
+            temp.m[i][j]=(*(*(m+i)+j))+(*(*(s.m+i)+j));
+
+            return temp;
+        }
+    }
+
+    Matrix Matrix:: operator-(const Matrix& s)const{
+        Matrix temp;
+        if(s.line!=line || s.column!=column)cout<<"Matrixes are not!!!!!!!\n";
+        else
+        {
+            temp.line =line;
+            temp.column=column;
+            temp.m= new int*[temp.line];
+            for(int i=0;i<temp.line;i++) temp.m[i]= new int[temp.column];
+
+            for(int i=0;i<temp.line;i++)
+            for(int j=0;j<temp.column;j++)
+            temp.m[i][j]=(*(*(m+i)+j))-(*(*(s.m+i)+j));
+
+            return temp;
+        }
+    }
+
+    Matrix Matrix::operator*(const Matrix& s)const{
+        Matrix temp;
+        if(column!=s.line)cout<<"Matrixes multiply impossible!!!!!!!\n";
+        else
+        {
+            temp.line =line;
+            temp.column=s.column;
+            temp.m= new int*[temp.line];
+            for(int i=0;i<temp.line;i++) temp.m[i]= new int[temp.column];
+
+            for(int i=0;i<temp.line;i++)
+                {
+                for(int j=0;j<temp.column;j++)
+                    {
+                    temp.m[i][j]=0;
+                    for(int z=0;z<column;z++)    temp.m[i][j]+=m[i][z]*s.m[z][j];
+                    }
+                }
+            return temp;
+        }
+    }
+
+    Matrix Matrix::operator--(int){
+        Matrix temp;
+        temp.line   = column;
+        temp.column = line;
+        temp.m = new int*[temp.line];
+        for(int i=0;i<temp.line;i++)
+        temp.m[i]= new int[temp.column];
+
+        for(int i=0;i<temp.line;i++)
+        for(int j=0;j<temp.column;j++)
+        temp.m[i][j]=m[j][i];
+    return temp;
+    }
+
+    Matrix& Matrix:: operator=(const Matrix& s){
+        if(this==&s) return *this;  //Пердотвращение присваивания самому себе
+        if(s.line!=line || s.column!=column){
+           for(int i=0;i<line;i++)  delete [] m[i];
+           delete []m;
+           line=s.line;
+           column=s.column;
+           m=new int* [line];
+           for(int i=0;i<line;i++)  m[i] =new int[column];
+        }
+        for(int i=0;i<line;i++)
+        for(int j=0;j<column;j++)
+        *(*(m+i)+j)=s.m[i][j];
+        return *this;
+    }
+
+
+    void Matrix::Filling_matrix(){
+    //    srand(time(0));
+        for(int i=0;i<line;i++)
+        for(int j=0;j<column;j++)
+        *(*(m+i)+j)= rand()%20;
+    }
+
+    void Matrix::Show()const{
+        int i;
+        for(i=0;i<line;i++){
+            for(int j=0;j<column;j++){
+                  if(j%column==0) cout<<"\n\n";
+                cout<<m[i][j]<<" ";
+            }
+        }
+        cout<<endl;
+    }
+
+
+int main()
+{
+    srand(time(0));
+
+    Matrix A(5,5);
+    A.Filling_matrix();
+    cout<<"This is matrix A:\n";
+    A.Show();
+    cout<<endl;
+
+    Matrix B(5,5);
+    B.Filling_matrix();
+    cout<<"This is matrix B:\n";
+    B.Show();
+    cout<<endl;
+
+    Matrix C = A*B;
+    cout<<"This is matrix C=A*B:\n";
+    C.Show();
+    cout<<endl;
+
+    C = A+B;
+    cout<<"This is matrix C=A+B:\n";
+    C.Show();
+    cout<<endl;
+
+    cout<<"This is matrix C--:\n";
+    C=C--;
+    C.Show();
+    cout<<endl;
+
+    A=C;
+    cout<<"This is matrix A=C:\n";
+    A.Show();
+    cout<<endl;
+
+    C = A-B;
+    cout<<"This is matrix C=A-B:\n";
+    C.Show();
+    cout<<"This is matrix element:\n";
+    C.Show(1,1);
+    cout<<endl;
+
+    C(0,1,77);
+    cout<<"add element matrix m[0][1]=77\n";
+    cout<<"This is matrix c:\n";
+    C.Show();
+
+ /*   char c[256];
+    cin>>c;
+    cout<<c<<"gggggggggg";
+    cout << "Hello world!" << endl;*/
+    return 0;
+}
